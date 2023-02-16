@@ -32,6 +32,7 @@ class PhoneNumberInput extends StatefulWidget {
   final TextStyle? labelStyle;
   final TextStyle? hintStyle;
   final EdgeInsetsGeometry? contentPadding;
+  final bool? hideArrow;
   const PhoneNumberInput({
     Key? key,
     this.controller,
@@ -59,6 +60,7 @@ class PhoneNumberInput extends StatefulWidget {
     this.labelStyle,
     this.hintStyle,
     this.contentPadding,
+    this.hideArrow,
   }) : super(key: key);
 
   @override
@@ -185,7 +187,8 @@ class _CountryCodePickerState extends State<PhoneNumberInput> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.arrow_drop_down),
+                          if (widget.hideArrow == true)
+                            const Icon(Icons.arrow_drop_down),
                           if (_selectedCountry != null &&
                               widget.showSelectedFlag)
                             Image.asset(
