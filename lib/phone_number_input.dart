@@ -33,6 +33,8 @@ class PhoneNumberInput extends StatefulWidget {
   final TextStyle? hintStyle;
   final EdgeInsetsGeometry? contentPadding;
   final bool? hideArrow;
+  final Color? countryListTextColor;
+
   const PhoneNumberInput({
     Key? key,
     this.controller,
@@ -61,6 +63,7 @@ class PhoneNumberInput extends StatefulWidget {
     this.hintStyle,
     this.contentPadding,
     this.hideArrow,
+    this.countryListTextColor,
   }) : super(key: key);
 
   @override
@@ -258,9 +261,11 @@ class _CountryCodePickerState extends State<PhoneNumberInput> {
             builder: (_) => SizedBox(
                   height: 500,
                   child: CountryCodeList(
-                      searchHint: widget.searchHint,
-                      allowSearch: widget.allowSearch,
-                      phoneNumberInputController: _phoneNumberInputController),
+                    searchHint: widget.searchHint,
+                    allowSearch: widget.allowSearch,
+                    phoneNumberInputController: _phoneNumberInputController,
+                    textColor: widget.countryListTextColor,
+                  ),
                 ));
         break;
       case CountryListMode.dialog:
@@ -271,10 +276,11 @@ class _CountryCodePickerState extends State<PhoneNumberInput> {
                   content: SizedBox(
                     width: double.maxFinite,
                     child: CountryCodeList(
-                        searchHint: widget.searchHint,
-                        allowSearch: widget.allowSearch,
-                        phoneNumberInputController:
-                            _phoneNumberInputController),
+                      searchHint: widget.searchHint,
+                      allowSearch: widget.allowSearch,
+                      phoneNumberInputController: _phoneNumberInputController,
+                      textColor: widget.countryListTextColor,
+                    ),
                   ),
                 ));
         break;
