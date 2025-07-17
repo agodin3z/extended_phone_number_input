@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:extended_phone_number_input/models/country.dart';
 import 'package:extended_phone_number_input/utils/number_converter.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttercontactpicker/fluttercontactpicker.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart' as parserNumber;
+import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
+import 'package:flutter_native_contact_picker/model/contact.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import 'models/countries_list.dart';
 
@@ -23,6 +22,8 @@ class PhoneNumberInputController extends ChangeNotifier {
   List<String>? _includeCountries;
   List<String>? _excludeCountries;
   Function(String)? _onUnsupportedCountrySelected;
+  final FlutterNativeContactPicker _nativeContactPicker =
+      FlutterNativeContactPicker();
 
   late Country _selectedCountry;
   String _phoneNumber = '';
@@ -124,7 +125,7 @@ class PhoneNumberInputController extends ChangeNotifier {
         final englishNumber = arabicNumberConverter(phoneNumber);
         final phoneInfo =
             getPhoneNumberInfo('${_selectedCountry.dialCode}$englishNumber');
-        final isValid = phoneInfo.validate();
+        final isValid = phoneInfo.isValid();
         _isValid = isValid;
         if (!isValid) {
           return _errorText ?? "الرجاء ادخال رقم جوال صحيح";
@@ -137,8 +138,8 @@ class PhoneNumberInputController extends ChangeNotifier {
     }
   }
 
-  parserNumber.PhoneNumber getPhoneNumberInfo(String phoneNumber) {
-    return parserNumber.PhoneNumber.fromRaw(phoneNumber);
+  PhoneNumber getPhoneNumberInfo(String phoneNumber) {
+    return PhoneNumber.parse(phoneNumber);
   }
 
   void _selectValues() {
@@ -183,12 +184,10 @@ class PhoneNumberInputController extends ChangeNotifier {
 
   Future<void> pickFromContacts() async {
     try {
-      if (!await FlutterContactPicker.hasPermission() && Platform.isAndroid) {
-        await FlutterContactPicker.requestPermission();
-      }
-      final PhoneContact contact =
-          await FlutterContactPicker.pickPhoneContact();
-      final String? number = contact.phoneNumber?.number;
+      final Contact? contact = await _nativeContactPicker.selectContact();
+      final String? number = contact?.phoneNumbers!.isNotEmpty == true
+          ? contact?.phoneNumbers!.first
+          : null;
       if (number != null) {
         phoneNumber = number.replaceAll(' ', '');
       }
