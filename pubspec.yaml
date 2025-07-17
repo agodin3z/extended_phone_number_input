@@ -11,8 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  fluttercontactpicker: ^4.6.0
-  phone_numbers_parser: ^4.2.1
+  flutter_native_contact_picker: ^0.0.10
+  phone_numbers_parser: ^9.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
